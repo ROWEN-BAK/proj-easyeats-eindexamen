@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getMealById } from "../api/mealdb.js"; // <-- jouw functie importeren
+import { getMealById } from "../api/mealdb.js"; 
+import "../styles/DetailRecipe.css";
 
 function RecipeDetail({ recipeId: propId }) {
   const { id: routeId } = useParams();
