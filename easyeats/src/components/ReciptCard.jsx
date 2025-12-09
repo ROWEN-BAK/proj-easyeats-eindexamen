@@ -1,4 +1,4 @@
-import "./ReciptCard.css";
+import "../styles/ReciptCard.css";
 import { useMemo } from "react";
 
 export default function ReciptCard({ recipe, onClick }) {

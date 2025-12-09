@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { getRecipeOfTheDay } from "../utils/recipeOfTheDay";
-import "./RecipeOfTheDay.css";
+import "../styles/RecipeOfTheDay.css";
 
 export default function RecipeOfTheDay({ onClick }) {
   const [recipe, setRecipe] = useState(null);

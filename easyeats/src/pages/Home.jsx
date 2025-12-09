@@ -4,7 +4,7 @@ import RecipeOfTheDay from "../components/RecipeOfTheDay";
 import { getRandomMeals } from "../api/mealdb";
 
 // ⬅️ VERY IMPORTANT: make sure this path matches your project
-import "./Home.css";
+import "../styles/Home.css";
 
 export default function Home() {
   const [recipes, setRecipes] = useState([]);
