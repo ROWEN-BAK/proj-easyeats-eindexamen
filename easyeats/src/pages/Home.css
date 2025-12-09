@@ -1,0 +1,52 @@
+.home-container {
+  padding: 20px;
+  text-align: center;
+}
+
+.home-title {
+  font-size: 2.2rem;
+  margin-bottom: 30px;
+}
+
+.rot-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+/* ⬇️ THIS IS THE CONTAINER AROUND THE CARDS */
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)); /* 4 per row */
+  gap: 20px;
+  justify-items: center;
+  margin-top: 20px;
+}
+
+.section-title {
+  margin-top: 30px;
+  margin-bottom: 20px;
+  font-size: 1.6rem;
+}
+
+/* ⬇️ BUTTON UNDER THE GRID */
+.load-more-btn {
+  margin-top: 30px;
+  padding: 12px 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 8px;
+  border: none;
+  background-color: #ff7f50;
+  color: white;
+  transition: 0.2s;
+}
+
+.load-more-btn:hover {
+  background-color: #ff571f;
+}
+
+.load-more-btn:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}

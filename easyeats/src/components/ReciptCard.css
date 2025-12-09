@@ -1,29 +1,85 @@
 .recipt-card {
   width: 300px;
-  padding: 10px;
-  border-radius: 12px;
+  padding: 12px;
+  border-radius: 18px;
   background: #ffffff;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
+/* Hover effect (card itself is NOT clickable) */
 .recipt-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
   box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+/* IMAGE */
+.image-wrapper {
+  position: relative;
 }
 
 .recipt-card img {
   width: 100%;
-  height: 200px;
+  height: 190px;
   object-fit: cover;
-  border-radius: 12px;
+  border-radius: 14px;
 }
 
+/* HEART icon in top-right */
+.heart-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ffffff;
+  padding: 6px 8px;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* TITLE */
 .recipt-title {
-  margin-top: 10px;
-  font-size: 1.1rem;
+  margin-top: 12px;
+  font-size: 1.25rem;
   font-weight: 600;
   color: #333;
-  text-align: center;
+}
+
+/* ROW: time + button */
+.recipt-info-row {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Time icon and text */
+.time-icon {
+  font-size: 18px;
+  margin-right: 6px;
+}
+
+.time-text {
+  font-size: 0.95rem;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* MAIN BUTTON */
+.open-btn {
+  background-color: #8B5E3C;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s ease;
+}
+
+.open-btn:hover {
+  background-color: #704a30;
 }
