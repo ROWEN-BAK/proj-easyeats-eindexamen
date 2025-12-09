@@ -1,41 +1,78 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import ReciptCard from "../components/ReciptCard";
 import RecipeOfTheDay from "../components/RecipeOfTheDay";
-import { getRandomMeals, searchMeals } from "../api/mealdb";
+import FilterMenu from "../components/FilterMenu";
 
-// ⬅️ VERY IMPORTANT: make sure this path matches your project
+import { getRandomMeals, getMealsByCategory, searchMeals } from "../api/mealdb";
+
 import "../styles/Home.css";
 
 export default function Home() {
   const [recipes, setRecipes] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
 
+  const firstRun = useRef(true);
+
+  // Load random recipes *only once*
   useEffect(() => {
-    loadRecipes(8);
+    loadRandomRecipes();
   }, []);
 
-  const loadRecipes = async (count) => {
+  const loadRandomRecipes = async () => {
     setLoading(true);
-    const newMeals = await getRandomMeals(count);
-
-    setRecipes((prev) => {
-      const existingIds = new Set(prev.map((meal) => meal.idMeal));
-      const filtered = newMeals.filter((meal) => !existingIds.has(meal.idMeal));
-      return [...prev, ...filtered];
-    });
-
+    const randomMeals = await getRandomMeals(8);
+    setRecipes(randomMeals);
     setLoading(false);
   };
 
-  // ⭐ SEARCH — Fetch ALL matching recipes from API
+  // Filter logic
+  useEffect(() => {
+    if (firstRun.current) {
+      firstRun.current = false;
+      return; // ← prevents double loading
+    }
+
+    if (selectedCategories.length === 0) {
+      loadRandomRecipes();
+    } else {
+      loadFilteredRecipes();
+    }
+  }, [selectedCategories]);
+
+  const loadFilteredRecipes = async () => {
+    setLoading(true);
+
+    let allMeals = [];
+
+    for (const category of selectedCategories) {
+      const meals = await getMealsByCategory(category);
+      allMeals.push(...meals);
+    }
+
+    const unique = [];
+    const ids = new Set();
+
+    for (const meal of allMeals) {
+      if (!ids.has(meal.idMeal)) {
+        ids.add(meal.idMeal);
+        unique.push(meal);
+      }
+    }
+
+    setRecipes(unique);
+    setLoading(false);
+  };
+
+  // Search overrides filters
   const handleSearch = async (value) => {
     setSearch(value);
 
     if (value.trim() === "") {
-      // Reset to random recipes
-      setRecipes([]);
-      loadRecipes(8);
+      selectedCategories.length === 0
+        ? loadRandomRecipes()
+        : loadFilteredRecipes();
       return;
     }
 
@@ -45,18 +82,12 @@ export default function Home() {
     setLoading(false);
   };
 
-  function handleCardClick(id) {
-    console.log("Clicked recipe:", id);
-  }
-
   return (
     <div className="home-container">
 
-      {/* TOP TITLES */}
       <h1 className="home-main-title">Discover Delicious Recipes for Every Day</h1>
       <h2 className="home-sub-title">Get inspired and save your favorites</h2>
 
-      {/* SEARCH BAR */}
       <input
         type="text"
         className="home-search"
@@ -65,35 +96,28 @@ export default function Home() {
         onChange={(e) => handleSearch(e.target.value)}
       />
 
-      {/* RECIPE OF THE DAY */}
-      <RecipeOfTheDay onClick={handleCardClick} />
+      <RecipeOfTheDay />
 
-      <h2 style={{ marginTop: "30px" }}>Random Recipes</h2>
+      {/* Recipes title + Filter button row */}
+      <div className="recipes-header">
+        <h2>Recipes</h2>
+
+        <FilterMenu
+          selected={selectedCategories}
+          onChange={setSelectedCategories}
+        />
+      </div>
 
       <div className="cards-container">
         {recipes?.length > 0 ? (
           recipes.map((recipe) => (
-            <ReciptCard
-              key={recipe.idMeal}
-              recipe={recipe}
-              onClick={handleCardClick}
-            />
+            <ReciptCard key={recipe.idMeal} recipe={recipe} />
           ))
         ) : (
           <p>No recipes found.</p>
         )}
       </div>
 
-      {/* LOAD MORE BUTTON (hidden during search) */}
-      {search === "" && (
-        <button
-          className="load-more-btn"
-          onClick={() => loadRecipes(40)}
-          disabled={loading}
-        >
-          {loading ? "Loading..." : "Load More"}
-        </button>
-      )}
     </div>
   );
 }

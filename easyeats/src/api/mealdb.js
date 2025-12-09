@@ -17,8 +17,15 @@ export async function searchMeals(query) {
   return data.meals || [];
 }
 
-// Filter by category
-export async function filterByCategory(category) {
+// Get all meal categories
+export async function getMealCategories() {
+  const res = await fetch(`${BASE_URL}/categories.php`);
+  const data = await res.json();
+  return data.categories || [];
+}
+
+// Get meals from a specific category
+export async function getMealsByCategory(category) {
   const res = await fetch(`${BASE_URL}/filter.php?c=${category}`);
   const data = await res.json();
   return data.meals || [];
