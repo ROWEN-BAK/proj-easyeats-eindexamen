@@ -1,0 +1,94 @@
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+  padding-top: 70px;
+}
+
+.profile-card {
+  background: #fff;
+  padding: 30px 50px;
+  width: 520px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  animation: fadeIn .4s ease;
+  text-align: center;
+}
+
+/* --- PFP + NAME --- */
+.profile-top {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.pfp-wrapper {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid #8B5E3C;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.profile-pfp {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pfp-wrapper:hover { transform: scale(1.05); opacity: .85; }
+
+.hidden-file { display: none; }
+
+.profile-email { color: #333; opacity: .8; }
+
+/* edit box */
+.edit-form {
+  background: #f8f3eb;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #8B5E3C;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.edit-form input {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #aaa;
+}
+
+/* buttons */
+.save-btn, .logout-btn {
+  width: 100%;
+  background:#8B5E3C;
+  color:#fff;
+  padding:10px;
+  border-radius:6px;
+  cursor:pointer;
+  transition:.25s;
+  margin-bottom:15px;
+}
+
+.save-btn:hover, .logout-btn:hover {
+  background:#704a30;
+}
+
+.recipes-section {
+  background:#fbf6ef;
+  padding:18px;
+  border-radius:8px;
+  border-left:4px solid #8B5E3C;
+}
+
+@keyframes fadeIn {
+  from { opacity:0; transform:translateY(10px); }
+  to { opacity:1; transform:translateY(0); }
+}

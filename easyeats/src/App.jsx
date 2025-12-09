@@ -1,17 +1,17 @@
 import "./App.css";
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Home from "./pages/Home"
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./pages/Home";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
-    <div className='App'>
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/home' element={<Home />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home/>} />
+        <Route path="/home" element={<Home/>} />
+        <Route path="/profile" element={<Profile/>} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
