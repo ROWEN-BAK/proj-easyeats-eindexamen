@@ -2,8 +2,11 @@ import { useEffect, useState, useRef } from "react";
 import ReciptCard from "../components/ReciptCard";
 import RecipeOfTheDay from "../components/RecipeOfTheDay";
 import FilterMenu from "../components/FilterMenu";
-
-import { getRandomMeals, getMealsByCategory, searchMeals } from "../api/mealdb";
+import {
+  getRandomMeals,
+  searchMeals,
+  getMealsByCategory
+} from "../api/mealdb";
 
 import "../styles/Home.css";
 
@@ -15,7 +18,6 @@ export default function Home() {
 
   const firstRun = useRef(true);
 
-  // Load random recipes *only once*
   useEffect(() => {
     loadRandomRecipes();
   }, []);
@@ -27,11 +29,11 @@ export default function Home() {
     setLoading(false);
   };
 
-  // Filter logic
+  // Load filtered recipes on category change
   useEffect(() => {
     if (firstRun.current) {
       firstRun.current = false;
-      return; // ← prevents double loading
+      return;
     }
 
     if (selectedCategories.length === 0) {
@@ -48,12 +50,12 @@ export default function Home() {
 
     for (const category of selectedCategories) {
       const meals = await getMealsByCategory(category);
-      allMeals.push(...meals);
+      if (meals?.length) allMeals.push(...meals);
     }
 
+    // Remove duplicates
     const unique = [];
     const ids = new Set();
-
     for (const meal of allMeals) {
       if (!ids.has(meal.idMeal)) {
         ids.add(meal.idMeal);
@@ -65,7 +67,6 @@ export default function Home() {
     setLoading(false);
   };
 
-  // Search overrides filters
   const handleSearch = async (value) => {
     setSearch(value);
 
@@ -84,7 +85,6 @@ export default function Home() {
 
   return (
     <div className="home-container">
-
       <h1 className="home-main-title">Discover Delicious Recipes for Every Day</h1>
       <h2 className="home-sub-title">Get inspired and save your favorites</h2>
 
@@ -98,7 +98,6 @@ export default function Home() {
 
       <RecipeOfTheDay />
 
-      {/* Recipes title + Filter button row */}
       <div className="recipes-header">
         <h2>Recipes</h2>
 
@@ -109,7 +108,7 @@ export default function Home() {
       </div>
 
       <div className="cards-container">
-        {recipes?.length > 0 ? (
+        {recipes.length > 0 ? (
           recipes.map((recipe) => (
             <ReciptCard key={recipe.idMeal} recipe={recipe} />
           ))
@@ -117,7 +116,6 @@ export default function Home() {
           <p>No recipes found.</p>
         )}
       </div>
-
     </div>
   );
 }

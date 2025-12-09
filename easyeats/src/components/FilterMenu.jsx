@@ -6,54 +6,57 @@ export default function FilterMenu({ selected, onChange }) {
   const [categories, setCategories] = useState([]);
   const [open, setOpen] = useState(false);
 
-  const containerRef = useRef(null); // reference to dropdown + button wrapper
+  const containerRef = useRef(null);
 
-  // Load categories
+  // Load categories once
   useEffect(() => {
     getMealCategories().then((cats) => setCategories(cats));
   }, []);
 
-  // Close when clicking outside
+  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (containerRef.current && !containerRef.current.contains(event.target)) {
         setOpen(false);
       }
     }
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const toggleCategory = (category) => {
-    if (selected.includes(category)) {
-      onChange(selected.filter((c) => c !== category));
+  const toggleCategory = (cat) => {
+    if (selected.includes(cat)) {
+      onChange(selected.filter((c) => c !== cat));
     } else {
-      onChange([...selected, category]);
+      onChange([...selected, cat]);
     }
   };
 
   return (
     <div className="filter-wrapper" ref={containerRef}>
       <button className="filter-toggle" onClick={() => setOpen(!open)}>
-        ⚙ Filter Recipes
+        ⚙ Filters
       </button>
 
       {open && (
         <div className="filter-dropdown">
-          {categories.map((cat) => (
-            <button
-              key={cat.idCategory}
-              className={
-                selected.includes(cat.strCategory)
-                  ? "filter-option active"
-                  : "filter-option"
-              }
-              onClick={() => toggleCategory(cat.strCategory)}
-            >
-              {cat.strCategory}
-            </button>
-          ))}
+          <h3 className="filter-title">Categories</h3>
+
+          <div className="filter-section">
+            {categories.map((cat) => (
+              <button
+                key={cat.idCategory}
+                className={
+                  selected.includes(cat.strCategory)
+                    ? "filter-option active"
+                    : "filter-option"
+                }
+                onClick={() => toggleCategory(cat.strCategory)}
+              >
+                {cat.strCategory}
+              </button>
+            ))}
+          </div>
         </div>
       )}
     </div>
