@@ -1,7 +1,7 @@
 import "../styles/ReciptCard.css";
 import { useMemo } from "react";
 
-export default function ReciptCard({ recipe, onClick }) {
+export default function ReciptCard({ recipe, showDetail }) {
   const title = recipe?.strMeal || "Loading title...";
   const image = recipe?.strMealThumb || "https://via.placeholder.com/300x200";
   const id = recipe?.idMeal;
@@ -23,7 +23,7 @@ export default function ReciptCard({ recipe, onClick }) {
       <div className="recipt-info-row">
         <span className="time-text">⏱ {randomTime} min</span>
 
-        <button className="open-btn" onClick={() => onClick && onClick(id)}>
+        <button className="open-btn" onClick={() => showDetail(id)}>
           View Recipe
         </button>
       </div>

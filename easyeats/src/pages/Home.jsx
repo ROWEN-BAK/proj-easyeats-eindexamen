@@ -6,12 +6,19 @@ import FilterMenu from "../components/FilterMenu";
 import { getRandomMeals, getMealsByCategory, searchMeals } from "../api/mealdb";
 
 import "../styles/Home.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const [recipes, setRecipes] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
+
+   const navigate = useNavigate();
+
+  const goToDetail = (id) => {
+    navigate(`/recipe/${id}`);
+  };
 
   const firstRun = useRef(true);
 
@@ -111,7 +118,7 @@ export default function Home() {
       <div className="cards-container">
         {recipes?.length > 0 ? (
           recipes.map((recipe) => (
-            <ReciptCard key={recipe.idMeal} recipe={recipe} />
+            <ReciptCard key={recipe.idMeal} recipe={recipe} showDetail={goToDetail} />
           ))
         ) : (
           <p>No recipes found.</p>
