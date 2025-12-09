@@ -14,12 +14,22 @@ export default function Home() {
     loadRecipes(8);
   }, []);
 
-  const loadRecipes = async (count) => {
-    setLoading(true);
-    const newMeals = await getRandomMeals(count);
-    setRecipes((prev) => [...prev, ...newMeals]);
-    setLoading(false);
-  };
+ const loadRecipes = async (count) => {
+  setLoading(true);
+  const newMeals = await getRandomMeals(count);
+
+  setRecipes((prev) => {
+    const existingIds = new Set(prev.map((meal) => meal.idMeal));
+
+    const filtered = newMeals.filter(
+      (meal) => !existingIds.has(meal.idMeal)
+    );
+
+    return [...prev, ...filtered];
+  });
+
+  setLoading(false);
+};
 
   function handleCardClick(id) {
     console.log("Clicked recipe:", id);
@@ -48,7 +58,7 @@ export default function Home() {
         onClick={() => loadRecipes(40)}
         disabled={loading}
       >
-        {loading ? "Loading..." : "Load 40 More"}
+        {loading ? "Loading..." : "Load More"}
       </button>
     </div>
   );
