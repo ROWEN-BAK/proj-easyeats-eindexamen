@@ -6,9 +6,9 @@ export default function FilterMenu({ selected, onChange }) {
   const [categories, setCategories] = useState([]);
   const [open, setOpen] = useState(false);
 
-  const dropdownRef = useRef(null);
+  const containerRef = useRef(null);
 
-  // Load categories
+  // Load categories once
   useEffect(() => {
     getMealCategories().then((cats) => setCategories(cats));
   }, []);
@@ -16,43 +16,33 @@ export default function FilterMenu({ selected, onChange }) {
   // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      if (containerRef.current && !containerRef.current.contains(event.target)) {
         setOpen(false);
       }
     }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
-    if (open) {
-      document.addEventListener("mousedown", handleClickOutside);
+  const toggleCategory = (cat) => {
+    if (selected.includes(cat)) {
+      onChange(selected.filter((c) => c !== cat));
     } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [open]);
-
-  const toggleCategory = (category) => {
-    if (selected.includes(category)) {
-      onChange(selected.filter((c) => c !== category));
-    } else {
-      onChange([...selected, category]);
+      onChange([...selected, cat]);
     }
   };
 
   return (
-    <>
-      <div className="filter-container">
-        <button className="filter-toggle" onClick={() => setOpen(!open)}>
-          ⚙ Filter Recipes
-        </button>
-      </div>
+    <div className="filter-wrapper" ref={containerRef}>
+      <button className="filter-toggle" onClick={() => setOpen(!open)}>
+        ⚙ Filters
+      </button>
 
       {open && (
-        <div className="filter-overlay">
-          <div className="filter-dropdown" ref={dropdownRef}>
-            <h3 className="filter-title">Select Categories</h3>
+        <div className="filter-dropdown">
+          <h3 className="filter-title">Categories</h3>
 
+          <div className="filter-section">
             {categories.map((cat) => (
               <button
                 key={cat.idCategory}
@@ -69,6 +59,6 @@ export default function FilterMenu({ selected, onChange }) {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

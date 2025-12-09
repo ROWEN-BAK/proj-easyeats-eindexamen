@@ -1,6 +1,7 @@
-/* Container of button */
-.filter-container {
-  margin: 0;
+/* Wrapper so dropdown stays near button */
+.filter-wrapper {
+  position: relative;
+  display: inline-block;
 }
 
 /* Filter button */
@@ -19,61 +20,53 @@
   background: #6c4d26;
 }
 
-/* Full-screen overlay behind dropdown */
-.filter-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.15); /* dim background */
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding-top: 60px; /* push dropdown down a bit */
-  z-index: 999;
-}
-
 /* Dropdown box */
 .filter-dropdown {
+  position: absolute;
+  top: 45px;
+  right: 0;
   background: white;
-  padding: 20px;
-  width: 80%;
-  max-width: 650px;
+  padding: 16px;
+  width: 280px;
 
-  border-radius: 14px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+  z-index: 999;
 
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: center;
-
-  animation: dropdownFade 0.25s ease;
+  animation: fadeIn 0.15s ease-out;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
-@keyframes dropdownFade {
-  from { transform: translateY(-10px); opacity: 0; }
-  to   { transform: translateY(0); opacity: 1; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
+/* Section title */
 .filter-title {
-  width: 100%;
-  text-align: center;
-  margin-bottom: 10px;
-  font-size: 1.2rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 8px;
   color: #80592e;
 }
 
-/* Filter buttons */
+/* Button area */
+.filter-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Category buttons */
 .filter-option {
-  padding: 8px 16px;
+  padding: 6px 10px;
   background: #eee8e1;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: .9rem;
-  transition: 0.2s ease;
+  font-size: 0.85rem;
+  transition: 0.2s;
 }
 
 .filter-option:hover {
