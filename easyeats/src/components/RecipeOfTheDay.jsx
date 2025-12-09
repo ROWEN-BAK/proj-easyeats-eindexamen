@@ -4,25 +4,55 @@ import "./RecipeOfTheDay.css";
 
 export default function RecipeOfTheDay({ onClick }) {
   const [recipe, setRecipe] = useState(null);
+  const [dailyTime, setDailyTime] = useState(null);
+  const [dailyPeople, setDailyPeople] = useState(null);
 
+  // Load recipe
   useEffect(() => {
     getRecipeOfTheDay().then((meal) => {
       setRecipe(meal);
     });
   }, []);
 
-  // Generate a short natural description of the dish
+  // 🔥 Check or generate daily random values
+  useEffect(() => {
+    const today = new Date().toDateString();
+
+    const saved = JSON.parse(localStorage.getItem("recipeOfDayRandom"));
+
+    if (saved && saved.date === today) {
+      // ✅ Use stored values
+      setDailyTime(saved.time);
+      setDailyPeople(saved.people);
+    } else {
+      // ❌ Generate NEW values for today
+      const newTime = Math.floor(Math.random() * (90 - 15 + 1)) + 15;   // 15–90 min
+      const newPeople = Math.floor(Math.random() * 6) + 1;              // 1–6 people
+
+      const data = {
+        date: today,
+        time: newTime,
+        people: newPeople,
+      };
+
+      localStorage.setItem("recipeOfDayRandom", JSON.stringify(data));
+
+      setDailyTime(newTime);
+      setDailyPeople(newPeople);
+    }
+  }, []);
+
+  // Auto description
   const dishDescription = useMemo(() => {
     if (!recipe) return "";
-
     const area = recipe.strArea || "Unknown origin";
     const category = recipe.strCategory || "Dish";
-    const name = recipe.strMeal;
 
-    return `A delicious ${category.toLowerCase()} from ${area}, known for its flavorful preparation and popularity.`;
+    return `A delicious ${category.toLowerCase()} from ${area}, known for its rich flavors and popularity around the world.`;
   }, [recipe]);
 
-  if (!recipe) return <p className="loading-text">Loading recipe of the day...</p>;
+  if (!recipe || dailyTime === null || dailyPeople === null)
+    return <p className="loading-text">Loading recipe of the day...</p>;
 
   return (
     <div className="rot-card">
@@ -38,14 +68,11 @@ export default function RecipeOfTheDay({ onClick }) {
 
         <h3 className="rot-name">{recipe.strMeal}</h3>
 
-        {/* NEW auto-generated description */}
-        <p className="rot-description">
-          {dishDescription}
-        </p>
+        <p className="rot-description">{dishDescription}</p>
 
         <div className="rot-info">
-          <span>⏱️ 30 min</span> {/* Placeholder */}
-          <span>👥 4 people</span> {/* Placeholder */}
+          <span>⏱️ {dailyTime} min</span>
+          <span>👥 {dailyPeople} people</span>
         </div>
 
         <div className="rot-actions">
@@ -55,7 +82,6 @@ export default function RecipeOfTheDay({ onClick }) {
           >
             View Recipe
           </button>
-
           <button className="rot-heart">♡</button>
         </div>
       </div>
