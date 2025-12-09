@@ -67,16 +67,16 @@ export default function RegLogin({ close, onLogin }) {
 
         {mode === "login" ? (
           <form onSubmit={handleLogin}>
-            <input type="email" name="email" placeholder="Email" required />
-            <input type="password" name="password" placeholder="Password" required />
-            <button type="submit">Log in</button>
+            <input className="input" type="email" name="email" placeholder="Email" required />
+            <input className="input" type="password" name="password" placeholder="Password" required />
+            <button className="button" type="submit">Log in</button>
           </form>
         ) : (
           <form onSubmit={handleRegister}>
-            <input type="text" name="username" placeholder="Username" required />
-            <input type="email" name="email" placeholder="Email" required />
-            <input type="password" name="password" placeholder="Password (min 6)" required />
-            <button type="submit">Create Account</button>
+            <input className="input" type="text" name="username" placeholder="Username" required />
+            <input className="input" type="email" name="email" placeholder="Email" required />
+            <input className="input" type="password" name="password" placeholder="Password (min 6)" required />
+            <button className="button" type="submit">Create Account</button>
           </form>
         )}
 

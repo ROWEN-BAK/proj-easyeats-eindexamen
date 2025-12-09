@@ -15,7 +15,7 @@
   animation: fade 0.3s ease;
 }
 
-input {
+.input {
   width: 90%;
   margin: 8px 0;
   padding: 10px;
@@ -23,7 +23,7 @@ input {
   border: 1px solid #aaa;
 }
 
-button {
+.button {
   width: 95%;
   padding: 10px;
   margin-top: 10px;
@@ -34,7 +34,7 @@ button {
   cursor: pointer;
 }
 
-button:hover { background:#704a30; }
+.button:hover { background:#704a30; }
 
 .switch span {
   color:#8B5E3C;
