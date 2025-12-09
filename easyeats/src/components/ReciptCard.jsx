@@ -23,11 +23,8 @@ export default function ReciptCard({ recipe, onClick }) {
       <div className="recipt-info-row">
         <span className="time-text">⏱ {randomTime} min</span>
 
-        <button
-          className="open-btn"
-          onClick={() => onClick && onClick(id)}
-        >
-  View Recipe
+        <button className="open-btn" onClick={() => onClick && onClick(id)}>
+          View Recipe
         </button>
       </div>
     </div>
