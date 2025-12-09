@@ -3,14 +3,14 @@
   padding: 12px;
   border-radius: 18px;
   background: #ffffff;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 /* Hover effect (card itself is NOT clickable) */
 .recipt-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
 /* IMAGE */
@@ -35,7 +35,7 @@
   border-radius: 50%;
   font-size: 16px;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 /* TITLE */
@@ -43,7 +43,7 @@
   margin-top: 12px;
   font-size: 1.25rem;
   font-weight: 600;
-  color: #333;
+  color: #77552f;
 }
 
 /* ROW: time + button */
@@ -62,7 +62,7 @@
 
 .time-text {
   font-size: 0.95rem;
-  color: #555;
+  color: #77552f;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -70,7 +70,7 @@
 
 /* MAIN BUTTON */
 .open-btn {
-  background-color: #8B5E3C;
+  background-color: #8b5e3c;
   color: white;
   border: none;
   padding: 8px 16px;
