@@ -76,7 +76,7 @@ export default function RegLogin({ close, onLogin }) {
           <form onSubmit={handleRegister}>
             <input className="input" type="text" name="username" placeholder="Username" required maxLength={20}/>
             <input className="input" type="email" name="email" placeholder="Email" required />
-            <input className="input" type="password" name="password" placeholder="Password (min 6)" required />
+            <input className="input" type="password" name="password" placeholder="Password (min 6)" required minLength={6}/>
             <button className="button" type="submit">Create Account</button>
           </form>
         )}

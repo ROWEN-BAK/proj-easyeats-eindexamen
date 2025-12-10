@@ -74,11 +74,16 @@ export default function Profile() {
     localStorage.setItem("users", JSON.stringify(updatedUsers));
   };
 
-  const logout = () => {
-    localStorage.removeItem("user");
-    setLoggedIn(false);
-    setShowPopup(true);
-  };
+const logout = () => {
+  localStorage.removeItem("user");
+  setLoggedIn(false);
+  setShowPopup(true);
+
+  setTimeout(() => {
+    window.location.reload();
+  }, 300);
+};
+
 
   return (
     <div className="profile-container">

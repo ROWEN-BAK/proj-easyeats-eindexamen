@@ -12,7 +12,7 @@
   width: 350px;
   border-radius: 10px;
   text-align: center;
-  position: relative;              /* <-- needed for X button position */
+  position: relative;            
   animation: fade 0.3s ease;
 }
 
@@ -48,7 +48,7 @@
   font-size: 0.9rem;
 }
 
-/* --------- X BUTTON STYLE --------- */
+
 .close-x {
   position: absolute;
   top: 8px;
