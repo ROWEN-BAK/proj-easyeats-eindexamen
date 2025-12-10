@@ -21,26 +21,25 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastY]);
 
-  const logout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-  };
+const logout = () => {
+  localStorage.removeItem("user");
+  setUser(null);
+  navigate("/home");
+};
+
 
   return (
     <>
       <nav className={`navbar ${show ? "show" : "hide"}`}>
         
-        {/* LOGO */}
         <h1 className="logo" onClick={() => navigate("/home")}>EasyEats</h1>
 
-        {/* Navigation Links */}
         <div className="nav-links">
           <Link to="/home">Home</Link>
           <Link to="">Make Recipe</Link>
           <Link to="/profile">Profile</Link>
         </div>
 
-        {/* Login / Logout */}
 {user ? (
   <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
     <span style={{ fontSize: "16px", color: "#333" }}>Hi, {user.username}</span>
