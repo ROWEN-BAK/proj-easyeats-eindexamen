@@ -1,0 +1,63 @@
+.navbar {
+  width: 100%;                
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 70px;
+  background: #fff;
+  border-bottom: 3px solid #8B5E3C;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  padding: 0 30px;               
+  z-index: 9999;
+  transition: top 0.35s ease-in-out;
+}
+
+/* Slide Animation */
+.navbar.hide { top: -80px; }
+.navbar.show { top: 0; }
+
+/* Logo */
+.logo {
+  font-size: 26px;
+  font-weight: bold;
+  color: #8B5E3C;
+  cursor: pointer;
+}
+
+/* Page links */
+.nav-links {
+  display: flex;
+  gap: 22px;
+}
+
+.nav-links a {
+  color: #333;
+  text-decoration: none;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.nav-links a:hover {
+  color: #8B5E3C;
+}
+
+/* Login/Logout button - FIXED WIDTH + ALWAYS VISIBLE */
+.nav-btn {
+  background: #8B5E3C;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  white-space: nowrap; /* prevents text from pushing outside */
+}
+
+.nav-btn:hover {
+  background: #704a30;
+}
+
+/* Prevent overlap with page content */
+body { padding-top: 80px; }

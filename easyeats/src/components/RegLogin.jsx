@@ -26,8 +26,7 @@ export default function RegLogin({ close, onLogin }) {
 
     onLogin();
     close();
-
-    setTimeout(() => window.location.reload(), 200); // 🔥 refresh page after login
+    setTimeout(() => window.location.reload(), 200);
   };
 
   // ---------------- REGISTER ----------------
@@ -54,15 +53,17 @@ export default function RegLogin({ close, onLogin }) {
 
     onLogin();
     close();
-
-    setTimeout(() => window.location.reload(), 200); // 🔥 refresh after register
+    setTimeout(() => window.location.reload(), 200);
   };
 
   return (
     <div className="popup-bg">
       <div className="popup-card">
-        <h2>{mode === "login" ? "Login" : "Register"}</h2>
 
+        {/* -------- New X Close Button -------- */}
+        <button className="close-x" onClick={() => window.location.href = "/home"}>✕</button>
+
+        <h2>{mode === "login" ? "Login" : "Register"}</h2>
         {error && <p className="error">{error}</p>}
 
         {mode === "login" ? (
@@ -73,7 +74,7 @@ export default function RegLogin({ close, onLogin }) {
           </form>
         ) : (
           <form onSubmit={handleRegister}>
-            <input className="input" type="text" name="username" placeholder="Username" required />
+            <input className="input" type="text" name="username" placeholder="Username" required maxLength={20}/>
             <input className="input" type="email" name="email" placeholder="Email" required />
             <input className="input" type="password" name="password" placeholder="Password (min 6)" required />
             <button className="button" type="submit">Create Account</button>
@@ -82,13 +83,11 @@ export default function RegLogin({ close, onLogin }) {
 
         <div className="switch">
           {mode === "login" ? (
-            <p>
-              Don't have an account?
+            <p> Don't have an account?
               <span onClick={() => { setError(""); setMode("register"); }}> Register</span>
             </p>
           ) : (
-            <p>
-              Already registered?
+            <p> Already registered?
               <span onClick={() => { setError(""); setMode("login"); }}> Login</span>
             </p>
           )}
