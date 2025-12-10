@@ -36,7 +36,7 @@ const logout = () => {
 
         <div className="nav-links">
           <Link to="/home">Home</Link>
-          <Link to="">Make Recipe</Link>
+          <Link to="/makerecipe">Make Recipe</Link>
           <Link to="/profile">Profile</Link>
         </div>
 

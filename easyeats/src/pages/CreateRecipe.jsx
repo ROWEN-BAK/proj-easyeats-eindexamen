@@ -1,15 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import RegLogin from "../components/RegLogin";
 import "../styles/CreateRecipe.css";
 
 function CreateRecipe() {
-  const [ingredients, setIngredients] = useState([
-    { amount: "", name: "" }
-  ]);
+  const [ingredients, setIngredients] = useState([{ amount: "", name: "" }]);
   const [steps, setSteps] = useState([""]);
 
-  function handleIngredientChange(index, field, value) {
+  const [user, setUser] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
+
+  // NEW: image upload
+  const [image, setImage] = useState(null);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("user");
+
+    if (stored) {
+      setUser(JSON.parse(stored));
+    } else {
+      setTimeout(() => setShowPopup(true), 200);
+    }
+  }, []);
+
+  function handleImageUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => setImage(reader.result); // save base64 image
+    reader.readAsDataURL(file);
+  }
+
+  function handleIngredientChange(i, field, value) {
     const updated = [...ingredients];
-    updated[index][field] = value;
+    updated[i][field] = value;
     setIngredients(updated);
   }
 
@@ -17,13 +41,13 @@ function CreateRecipe() {
     setIngredients([...ingredients, { amount: "", name: "" }]);
   }
 
-  function removeIngredient(index) {
-    setIngredients(ingredients.filter((_, i) => i !== index));
+  function removeIngredient(i) {
+    setIngredients(ingredients.filter((_, index) => index !== i));
   }
 
-  function handleStepChange(index, value) {
+  function handleStepChange(i, value) {
     const updated = [...steps];
-    updated[index] = value;
+    updated[i] = value;
     setSteps(updated);
   }
 
@@ -31,173 +55,185 @@ function CreateRecipe() {
     setSteps([...steps, ""]);
   }
 
-  function removeStep(index) {
-    setSteps(steps.filter((_, i) => i !== index));
+  function removeStep(i) {
+    setSteps(steps.filter((_, index) => index !== i));
   }
 
   function handleSubmit(e) {
     e.preventDefault();
 
+    if (!user) {
+      alert("You must be logged in.");
+      return;
+    }
+
+    const id = "my-" + Date.now();
+
     const recipe = {
+      id,
       name: e.target.name.value,
       category: e.target.category.value,
       time: e.target.time.value,
       persons: e.target.persons.value,
       description: e.target.description.value,
-      image: e.target.image.value,
+      image: image || "/placeholder.png", // NEW
       ingredients,
       steps,
       tips: e.target.tips.value,
+      author: user.username,
+      email: user.email,
     };
 
-    console.log("NEW RECIPE:", recipe);
-    alert("Recept opgeslagen! (console checken)");
+    const globalRecipes = JSON.parse(localStorage.getItem("recipes")) || [];
+    globalRecipes.push(recipe);
+    localStorage.setItem("recipes", JSON.stringify(globalRecipes));
+
+    const updatedUser = {
+      ...user,
+      myRecipes: [...(user.myRecipes || []), recipe],
+    };
+
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const updatedUsers = users.map((u) =>
+      u.email === updatedUser.email ? updatedUser : u
+    );
+    localStorage.setItem("users", JSON.stringify(updatedUsers));
+
+    alert("Recipe saved!");
   }
 
   return (
     <div className="create-wrapper">
       <h1 className="page-title">Make your own recipe</h1>
-      <p className="page-sub">share your culinary creations with Easyeats</p>
+      <p className="page-sub">Share your culinary creations with Easyeats</p>
 
-      <form className="create-card" onSubmit={handleSubmit}>
+      {showPopup && (
+        <RegLogin
+          onLogin={() => {
+            setUser(JSON.parse(localStorage.getItem("user")));
+            setShowPopup(false);
+          }}
+          close={() => setShowPopup(false)}
+        />
+      )}
 
-        {/* SECTION: Recept Details */}
-        <h2 className="section-title">Recipe Details</h2>
+      {user ? (
+        <form className="create-card" onSubmit={handleSubmit}>
+          <h2 className="section-title">Recipe Details</h2>
 
-        <div className="grid-2">
-          <div>
-            <label>Recipe name *</label>
-            <input type="text" name="name" placeholder="Bv. Pizza pepperoni" required />
-          </div>
+          {/* IMAGE UPLOAD FIELD */}
+          <label>Recipe image</label>
+          <input type="file" accept="image/*" onChange={handleImageUpload} />
 
-          <div>
-            <label>Category</label>
-            <select name="category" defaultValue="">
-              <option value="">Select category</option>
-              <option value="Pasta">Pasta</option>
-              <option value="Beef">Beef</option>
-              <option value="Chicken">Chicken</option>
-              <option value="Dessert">Dessert</option>
-              <option value="Lamb">Lamb</option>
-              <option value="Misscelaneous">Misscellaneous</option>
-              <option value="Pork">Pork</option>
-              <option value="Seafood">Seafood</option>
-              <option value="Side">Side</option>
-              <option value="Starter">Starter</option>
-              <option value="Vegan">Vegan</option>
-              <option value="Vegetarian">Vegetarian</option>
-              <option value="Breakfast">Breakfast</option>
-              <option value="Goat">Goat</option>
-            </select>
-          </div>
-        </div>
+          {/* Preview */}
+          {image && (
+            <img src={image} alt="preview" className="preview-image" />
+          )}
 
-        <div className="grid-2">
-          <div>
-            <label>Preperation time</label>
-            <div className="time-input">
-              <input type="number" name="time" defaultValue="30" />
-              <span>min</span>
+          <div className="grid-2">
+            <div>
+              <label>Recipe name *</label>
+              <input type="text" name="name" required />
+            </div>
+
+            <div>
+              <label>Category</label>
+              <select name="category" defaultValue="">
+                <option value="">Select category</option>
+                <option value="Pasta">Pasta</option>
+                <option value="Beef">Beef</option>
+                <option value="Chicken">Chicken</option>
+                <option value="Dessert">Dessert</option>
+                <option value="Seafood">Seafood</option>
+              </select>
             </div>
           </div>
 
-          <div>
-            <label>For how many people</label>
-            <input type="number" name="persons" defaultValue="4" />
+          <div className="grid-2">
+            <div>
+              <label>Preparation time</label>
+              <div className="time-input">
+                <input type="number" name="time" defaultValue="30" />
+                <span>min</span>
+              </div>
+            </div>
+
+            <div>
+              <label>For how many people</label>
+              <input type="number" name="persons" defaultValue="4" />
+            </div>
           </div>
-        </div>
 
-        <label>Short description</label>
-        <textarea name="description" placeholder="Describe your recipe in a few sentences..." />
+          <label>Short description</label>
+          <textarea name="description" />
 
+          <h2 className="section-title">Ingredients</h2>
+          {ingredients.map((item, i) => (
+            <div className="ingredient-row" key={i}>
+              <input
+                type="text"
+                placeholder="200g"
+                value={item.amount}
+                onChange={(e) =>
+                  handleIngredientChange(i, "amount", e.target.value)
+                }
+              />
+              <input
+                type="text"
+                placeholder="Ingredient"
+                value={item.name}
+                onChange={(e) =>
+                  handleIngredientChange(i, "name", e.target.value)
+                }
+              />
+              {i > 0 && (
+                <button
+                  type="button"
+                  className="delete-btn"
+                  onClick={() => removeIngredient(i)}
+                >
+                  🗑️
+                </button>
+              )}
+            </div>
+          ))}
+          <button type="button" className="add-btn" onClick={addIngredient}>
+            + Add
+          </button>
 
-        {/* SECTION: Foto */}
-        <h2 className="section-title">Recipe Image</h2>
-        <div className="upload-box">
-          <p>🖼️ drag image here to add</p>
-          <small>PNG, JPG tot 5MB</small>
-        </div>
+          <h2 className="section-title">Instructions</h2>
+          {steps.map((step, i) => (
+            <div className="step-row" key={i}>
+              <div className="step-num">{i + 1}</div>
+              <textarea
+                value={step}
+                onChange={(e) => handleStepChange(i, e.target.value)}
+              />
+              {i > 0 && (
+                <button
+                  type="button"
+                  className="delete-btn"
+                  onClick={() => removeStep(i)}
+                >
+                  🗑️
+                </button>
+              )}
+            </div>
+          ))}
+          <button type="button" className="add-btn" onClick={addStep}>
+            + Add step
+          </button>
 
+          <h2 className="section-title">Advice</h2>
+          <textarea name="tips" />
 
-        {/* SECTION: Ingrediënten */}
-        <h2 className="section-title">Ingredients</h2>
-
-        {ingredients.map((item, i) => (
-          <div key={i} className="ingredient-row">
-            <input
-              type="text"
-              placeholder="weight amount (bijv. 200g)"
-              value={item.amount}
-              onChange={(e) =>
-                handleIngredientChange(i, "amount", e.target.value)
-              }
-              required
-            />
-            <input
-              type="text"
-              placeholder="Ingredient name"
-              value={item.name}
-              onChange={(e) =>
-                handleIngredientChange(i, "name", e.target.value)
-              }
-              required
-            />
-            {i > 0 && (
-              <button
-                type="button"
-                className="delete-btn"
-                onClick={() => removeIngredient(i)}
-              >
-                🗑️
-              </button>
-            )}
-          </div>
-        ))}
-
-        <button type="button" className="add-btn" onClick={addIngredient}>
-          + Add
-        </button>
-
-
-        {/* SECTION: Bereidingswijze */}
-        <h2 className="section-title">Instructions</h2>
-
-        {steps.map((step, i) => (
-          <div key={i} className="step-row">
-            <div className="step-num">{i + 1}</div>
-            <textarea
-              placeholder="Describe the instruction..."
-              value={step}
-              onChange={(e) => handleStepChange(i, e.target.value)}
-              required
-            />
-            {i > 0 && (
-              <button
-                type="button"
-                className="delete-btn"
-                onClick={() => removeStep(i)}
-              >
-                🗑️
-              </button>
-            )}
-          </div>
-        ))}
-
-        <button type="button" className="add-btn" onClick={addStep}>
-          + Add step
-        </button>
-
-
-        {/* SECTION: Tips */}
-        <h2 className="section-title">Advice and pointers</h2>
-        <textarea
-          name="tips"
-          placeholder="Share your advice and points of interest"
-        />
-
-        {/* SUBMIT */}
-        <button className="save-btn">Save</button>
-      </form>
+          <button className="save-btn">Save</button>
+        </form>
+      ) : (
+        <p style={{ textAlign: "center" }}>Please log in to create a recipe.</p>
+      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getMealById } from "../api/mealdb.js"; 
+import { getMealById } from "../api/mealdb.js";
 import "../styles/DetailRecipe.css";
 
 function RecipeDetail({ recipeId: propId }) {
@@ -12,6 +12,15 @@ function RecipeDetail({ recipeId: propId }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    const storedRecipes = JSON.parse(localStorage.getItem("recipes")) || [];
+    const customRecipe = storedRecipes.find((r) => r.id === recipeId);
+
+    if (customRecipe) {
+      setMeal(customRecipe);
+      setLoading(false);
+      return;
+    }
+
     async function fetchMeal() {
       try {
         const data = await getMealById(recipeId);
@@ -31,34 +40,40 @@ function RecipeDetail({ recipeId: propId }) {
   if (error) return <p>Er ging iets mis: {error}</p>;
   if (!meal) return <p>Geen recept gevonden.</p>;
 
-  // INGREDIENTS + MEASURES uit TheMealDB dynamisch ophalen
-  const ingredients = [];
-  for (let i = 1; i <= 20; i++) {
-    const ing = meal[`strIngredient${i}`];
-    const measure = meal[`strMeasure${i}`];
+  const isCustom = meal.ingredients && Array.isArray(meal.ingredients);
 
-    if (ing && ing.trim() !== "") {
-      ingredients.push(`${measure} ${ing}`);
+  let ingredients = [];
+
+  if (isCustom) {
+    ingredients = meal.ingredients.map((i) => `${i.amount} ${i.name}`);
+  } else {
+    for (let i = 1; i <= 20; i++) {
+      const ing = meal[`strIngredient${i}`];
+      const measure = meal[`strMeasure${i}`];
+
+      if (ing && ing.trim() !== "") {
+        ingredients.push(`${measure} ${ing}`);
+      }
     }
   }
 
   return (
-    <div style={{ maxWidth: "750px", margin: "0 auto", padding: "20px" }}>
-      <h1>{meal.strMeal}</h1>
+    <div className="detail-wrapper">
+      <h1>{meal.name || meal.strMeal}</h1>
 
-      {meal.strMealThumb && (
+      {(meal.image || meal.strMealThumb) && (
         <img
-          src={meal.strMealThumb}
-          alt={meal.strMeal}
-          style={{ width: "100%", borderRadius: "10px", marginBottom: "20px" }}
+          src={meal.image || meal.strMealThumb}
+          alt={meal.name || meal.strMeal}
+          className="detail-image"
         />
       )}
 
       <h2>Category</h2>
-      <p>{meal.strCategory}</p>
+      <p>{meal.category || meal.strCategory}</p>
 
       <h2>Country of origin</h2>
-      <p>{meal.strArea}</p>
+      <p>{meal.area || meal.strArea || "Unknown"}</p>
 
       <h2>Ingredients</h2>
       <ul>
@@ -68,7 +83,15 @@ function RecipeDetail({ recipeId: propId }) {
       </ul>
 
       <h2>Instructions</h2>
-      <p style={{ whiteSpace: "pre-line" }}>{meal.strInstructions}</p>
+      {isCustom ? (
+        <ul>
+          {meal.steps.map((step, i) => (
+            <li key={i}>{step}</li>
+          ))}
+        </ul>
+      ) : (
+        <p style={{ whiteSpace: "pre-line" }}>{meal.strInstructions}</p>
+      )}
 
       {meal.strYoutube && (
         <>
