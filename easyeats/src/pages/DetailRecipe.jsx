@@ -54,27 +54,27 @@ function RecipeDetail({ recipeId: propId }) {
         />
       )}
 
-      <h2>Categorie</h2>
+      <h2>Category</h2>
       <p>{meal.strCategory}</p>
 
-      <h2>Herkomst</h2>
+      <h2>Country of origin</h2>
       <p>{meal.strArea}</p>
 
-      <h2>Ingrediënten</h2>
+      <h2>Ingredients</h2>
       <ul>
         {ingredients.map((item, index) => (
           <li key={index}>{item}</li>
         ))}
       </ul>
 
-      <h2>Bereidingswijze</h2>
+      <h2>Instructions</h2>
       <p style={{ whiteSpace: "pre-line" }}>{meal.strInstructions}</p>
 
       {meal.strYoutube && (
         <>
           <h2>Video</h2>
           <a href={meal.strYoutube} target="_blank" rel="noopener noreferrer">
-            Bekijk op YouTube
+            Watch on YouTube
           </a>
         </>
       )}

@@ -78,7 +78,7 @@ export default function RecipeOfTheDay({ onClick }) {
         <div className="rot-actions">
           <button
             className="rot-button"
-            onClick={() => onClick?.(recipe.idMeal)}
+            onClick={() => showDetail(id)}
           >
             View Recipe
           </button>
