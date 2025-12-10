@@ -17,7 +17,7 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
 
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const goToDetail = (id) => {
     navigate(`/recipe/${id}`);
@@ -33,6 +33,27 @@ export default function Home() {
     setLoading(true);
     const randomMeals = await getRandomMeals(8);
     setRecipes(randomMeals);
+    setLoading(false);
+  };
+
+  // NEW: Load 40 more recipes with duplicate protection
+  const loadMoreRecipes = async () => {
+    setLoading(true);
+
+    // Fetch 40 meals
+    const moreMeals = await getRandomMeals(40);
+
+    // Remove duplicates
+    setRecipes((prev) => {
+      const existingIds = new Set(prev.map((r) => r.idMeal));
+
+      const filtered = moreMeals.filter(
+        (meal) => !existingIds.has(meal.idMeal)
+      );
+
+      return [...prev, ...filtered];
+    });
+
     setLoading(false);
   };
 
@@ -123,6 +144,17 @@ export default function Home() {
           <p>No recipes found.</p>
         )}
       </div>
+
+      {/* SHOW MORE BUTTON: Only when search is empty AND no filters selected */}
+      {search === "" && selectedCategories.length === 0 && (
+        <button
+          className="load-more-btn"
+          onClick={loadMoreRecipes}
+          disabled={loading}
+        >
+          {loading ? "Loading..." : "Show More"}
+        </button>
+      )}
     </div>
   );
 }

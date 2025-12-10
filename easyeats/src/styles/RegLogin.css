@@ -12,6 +12,7 @@
   width: 350px;
   border-radius: 10px;
   text-align: center;
+  position: relative;            
   animation: fade 0.3s ease;
 }
 
@@ -33,7 +34,6 @@
   border-radius: 6px;
   cursor: pointer;
 }
-
 .button:hover { background:#704a30; }
 
 .switch span {
@@ -47,5 +47,18 @@
   margin-bottom:10px;
   font-size: 0.9rem;
 }
+
+
+.close-x {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #444;
+}
+.close-x:hover { color: #8B5E3C; }
 
 @keyframes fade { from{opacity:0;} to{opacity:1;} }
