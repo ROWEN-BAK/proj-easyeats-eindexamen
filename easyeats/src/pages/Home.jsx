@@ -36,14 +36,11 @@ export default function Home() {
     setLoading(false);
   };
 
-  // NEW: Load 40 more recipes with duplicate protection
   const loadMoreRecipes = async () => {
     setLoading(true);
 
-    // Fetch 40 meals
     const moreMeals = await getRandomMeals(40);
 
-    // Remove duplicates
     setRecipes((prev) => {
       const existingIds = new Set(prev.map((r) => r.idMeal));
 
@@ -57,7 +54,6 @@ export default function Home() {
     setLoading(false);
   };
 
-  // Load filtered recipes on category change
   useEffect(() => {
     if (firstRun.current) {
       firstRun.current = false;
@@ -81,7 +77,6 @@ export default function Home() {
       if (meals?.length) allMeals.push(...meals);
     }
 
-    // Remove duplicates
     const unique = [];
     const ids = new Set();
     for (const meal of allMeals) {
@@ -145,7 +140,7 @@ export default function Home() {
         )}
       </div>
 
-      {/* SHOW MORE BUTTON: Only when search is empty AND no filters selected */}
+      
       {search === "" && selectedCategories.length === 0 && (
         <button
           className="load-more-btn"
