@@ -60,7 +60,6 @@ export default function RegLogin({ close, onLogin }) {
     <div className="popup-bg">
       <div className="popup-card">
 
-        {/* -------- New X Close Button -------- */}
         <button className="close-x" onClick={() => window.location.href = "/home"}>✕</button>
 
         <h2>{mode === "login" ? "Login" : "Register"}</h2>

@@ -8,12 +8,12 @@ export default function FilterMenu({ selected, onChange }) {
 
   const containerRef = useRef(null);
 
-  // Load categories once
+  
   useEffect(() => {
     getMealCategories().then((cats) => setCategories(cats));
   }, []);
 
-  // Close dropdown when clicking outside
+ 
   useEffect(() => {
     function handleClickOutside(event) {
       if (containerRef.current && !containerRef.current.contains(event.target)) {

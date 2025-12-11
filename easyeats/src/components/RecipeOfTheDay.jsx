@@ -44,7 +44,7 @@ export default function RecipeOfTheDay({ onClick }) {
         <span className="rot-badge">⭐ Recommended</span>
       </div>
 
-      {/* MAIN ROW */}
+      
       <div className="rot-main">
         <div className="rot-image-wrapper">
           <img src={recipe.strMealThumb} alt={recipe.strMeal} className="rot-image" />
@@ -53,7 +53,7 @@ export default function RecipeOfTheDay({ onClick }) {
         <div className="rot-content">
           <h3 className="rot-name">{recipe.strMeal}</h3>
 
-          {/* Category instead of description */}
+          
           <p className="rot-description">
             {recipe.strCategory} • {recipe.strArea}
           </p>

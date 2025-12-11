@@ -9,7 +9,6 @@ function CreateRecipe() {
   const [user, setUser] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
 
-  // NEW: image upload
   const [image, setImage] = useState(null);
 
   useEffect(() => {
@@ -27,7 +26,7 @@ function CreateRecipe() {
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = () => setImage(reader.result); // save base64 image
+    reader.onload = () => setImage(reader.result);
     reader.readAsDataURL(file);
   }
 
@@ -76,7 +75,7 @@ function CreateRecipe() {
       time: e.target.time.value,
       persons: e.target.persons.value,
       description: e.target.description.value,
-      image: image || "/placeholder.png", // NEW
+      image: image || "/placeholder.png",
       ingredients,
       steps,
       tips: e.target.tips.value,
@@ -123,11 +122,10 @@ function CreateRecipe() {
         <form className="create-card" onSubmit={handleSubmit}>
           <h2 className="section-title">Recipe Details</h2>
 
-          {/* IMAGE UPLOAD FIELD */}
+          
           <label>Recipe image</label>
           <input type="file" accept="image/*" onChange={handleImageUpload} />
 
-          {/* Preview */}
           {image && (
             <img src={image} alt="preview" className="preview-image" />
           )}
