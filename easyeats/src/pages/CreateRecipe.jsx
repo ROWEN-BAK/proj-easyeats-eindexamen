@@ -5,7 +5,6 @@ import "../styles/CreateRecipe.css";
 function CreateRecipe() {
   const [ingredients, setIngredients] = useState([{ amount: "", name: "" }]);
   const [steps, setSteps] = useState([""]);
-
   const [user, setUser] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
 
@@ -27,7 +26,7 @@ function CreateRecipe() {
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = () => setImage(reader.result); // save base64 image
+    reader.onload = () => setImage(reader.result); 
     reader.readAsDataURL(file);
   }
 
@@ -67,19 +66,39 @@ function CreateRecipe() {
       return;
     }
 
+    // VALIDATION HERE
+    const name = e.target.name.value.trim();
+    const category = e.target.category.value.trim();
+    const time = e.target.time.value.trim();
+    const persons = e.target.persons.value.trim();
+    const description = e.target.description.value.trim();
+    const tips = e.target.tips.value.trim();
+
+    if (!image) return alert("Please upload an image.");
+    if (!name) return alert("Recipe name is required.");
+    if (!category) return alert("Please select a category.");
+    if (!time) return alert("Preparation time is required.");
+    if (!persons) return alert("Number of persons is required.");
+    if (!description) return alert("Description is required.");
+    if (ingredients.some(i => !i.amount.trim() || !i.name.trim()))
+      return alert("All ingredient fields must be filled.");
+    if (steps.some(s => !s.trim()))
+      return alert("All steps must be filled.");
+    if (!tips) return alert("Advice (tips) cannot be empty.");
+
     const id = "my-" + Date.now();
 
     const recipe = {
       id,
-      name: e.target.name.value,
-      category: e.target.category.value,
-      time: e.target.time.value,
-      persons: e.target.persons.value,
-      description: e.target.description.value,
-      image: image || "/placeholder.png", // NEW
+      name,
+      category,
+      time,
+      persons,
+      description,
+      image: image || "/placeholder.png",
       ingredients,
       steps,
-      tips: e.target.tips.value,
+      tips,
       author: user.username,
       email: user.email,
     };
@@ -123,11 +142,9 @@ function CreateRecipe() {
         <form className="create-card" onSubmit={handleSubmit}>
           <h2 className="section-title">Recipe Details</h2>
 
-          {/* IMAGE UPLOAD FIELD */}
-          <label>Recipe image</label>
+          <label>Recipe image *</label>
           <input type="file" accept="image/*" onChange={handleImageUpload} />
 
-          {/* Preview */}
           {image && (
             <img src={image} alt="preview" className="preview-image" />
           )}
@@ -135,11 +152,11 @@ function CreateRecipe() {
           <div className="grid-2">
             <div>
               <label>Recipe name *</label>
-              <input type="text" name="name" required />
+              <input type="text" name="name" />
             </div>
 
             <div>
-              <label>Category</label>
+              <label>Category *</label>
               <select name="category" defaultValue="">
                 <option value="">Select category</option>
                 <option value="Pasta">Pasta</option>
@@ -147,13 +164,21 @@ function CreateRecipe() {
                 <option value="Chicken">Chicken</option>
                 <option value="Dessert">Dessert</option>
                 <option value="Seafood">Seafood</option>
+                <option value="lamb">lamb</option>
+                <option value="Miscellaneous">Miscellaneous</option>
+                <option value="Side">Side</option>
+                <option value="Starter">Starter</option>
+                <option value="Vegan">Vegan</option>
+                <option value="Vegetarian">Vegetarian</option>
+                <option value="Breakfast">Breakfast</option>
+                <option value="Goat">Goat</option>
               </select>
             </div>
           </div>
 
           <div className="grid-2">
             <div>
-              <label>Preparation time</label>
+              <label>Preparation time *</label>
               <div className="time-input">
                 <input type="number" name="time" defaultValue="30" />
                 <span>min</span>
@@ -161,15 +186,15 @@ function CreateRecipe() {
             </div>
 
             <div>
-              <label>For how many people</label>
+              <label>For how many people *</label>
               <input type="number" name="persons" defaultValue="4" />
             </div>
           </div>
 
-          <label>Short description</label>
+          <label>Short description *</label>
           <textarea name="description" />
 
-          <h2 className="section-title">Ingredients</h2>
+          <h2 className="section-title">Ingredients *</h2>
           {ingredients.map((item, i) => (
             <div className="ingredient-row" key={i}>
               <input
@@ -203,7 +228,7 @@ function CreateRecipe() {
             + Add
           </button>
 
-          <h2 className="section-title">Instructions</h2>
+          <h2 className="section-title">Instructions *</h2>
           {steps.map((step, i) => (
             <div className="step-row" key={i}>
               <div className="step-num">{i + 1}</div>
@@ -226,7 +251,7 @@ function CreateRecipe() {
             + Add step
           </button>
 
-          <h2 className="section-title">Advice</h2>
+          <h2 className="section-title">Advice *</h2>
           <textarea name="tips" />
 
           <button className="save-btn">Save</button>
