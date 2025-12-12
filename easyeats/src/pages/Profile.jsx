@@ -46,6 +46,7 @@ export default function Profile() {
     let updatedUser = { ...user };
 
     if (newUsername) updatedUser.username = newUsername;
+
     if (newPassword) {
       if (newPassword.length < 6) {
         alert("Password must be at least 6 characters.");
@@ -65,6 +66,7 @@ export default function Profile() {
     localStorage.setItem("user", JSON.stringify(updatedUser));
 
     const users = JSON.parse(localStorage.getItem("users")) || [];
+
     const updatedUsers = users.map((u) =>
       u.email === updatedUser.email ? updatedUser : u
     );
@@ -79,7 +81,13 @@ export default function Profile() {
     localStorage.removeItem("user");
     setUser(null);
     setLoggedIn(false);
+
     setTimeout(() => setShowPopup(true), 200);
+
+   
+    setTimeout(() => {
+      window.location.reload();
+    }, 300);
   };
 
   const deleteRecipe = (id) => {
